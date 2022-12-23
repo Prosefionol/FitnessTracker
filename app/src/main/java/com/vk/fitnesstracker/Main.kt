@@ -28,7 +28,6 @@ class Main : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        MapKitFactory.setApiKey(resources.getString(R.string.yandex_key))
         val view = inflater.inflate(R.layout.fragment_main, container, false)
         MapKitFactory.initialize(view.context)
         mapview = view.findViewById<MapView>(R.id.ya_map)

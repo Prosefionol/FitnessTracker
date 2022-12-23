@@ -25,7 +25,6 @@ class Progress : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(ProgressViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }
