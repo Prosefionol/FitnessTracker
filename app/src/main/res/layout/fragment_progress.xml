@@ -12,5 +12,13 @@
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         />
+    <ProgressBar
+        android:id="@+id/progress_loadingStub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        />
 
 </FrameLayout>

@@ -6,6 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+
+fun createDetailedProgress(
+    field: Int
+): DetailedProgress {
+    return DetailedProgress().apply {
+        arguments = Bundle().apply { putInt("number", field) }
+    }
+}
 
 class DetailedProgress : Fragment() {
 
@@ -19,7 +28,16 @@ class DetailedProgress : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_detailed_progress, container, false)
+        val view = inflater.inflate(R.layout.fragment_detailed_progress, null, false)
+        var cnt: Int? = arguments?.getInt("number", 0)
+        if (cnt == null)
+        {
+            cnt = 0
+        }
+        view.findViewById<TextView>(R.id.detailed_trainings_t1).text = "Тренировка $cnt"
+        view.findViewById<TextView>(R.id.detailed_trainings_t2).text = "Пройдена дистанция: ${cnt * 1.2}"
+        view.findViewById<TextView>(R.id.detailed_trainings_t3).text = "Потрачено каллорий: ${cnt * 500}"
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

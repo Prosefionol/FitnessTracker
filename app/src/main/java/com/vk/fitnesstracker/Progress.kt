@@ -2,12 +2,16 @@ package com.vk.fitnesstracker
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.concurrent.thread
 
 class Progress : Fragment(), ProgressAdapter.Listener {
 
@@ -17,6 +21,8 @@ class Progress : Fragment(), ProgressAdapter.Listener {
 
     private lateinit var viewModel: ProgressViewModel
     private var cnt = 0
+    private lateinit var loadingStub: ProgressBar
+    private val handler = Handler()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,13 +49,18 @@ class Progress : Fragment(), ProgressAdapter.Listener {
         {
             cnt = startTrainingList(trainings)
         }
+        loadingStub = view.findViewById(R.id.progress_loadingStub)
+        loadingStub.isVisible = true
 
         val rv: RecyclerView = view.findViewById(R.id.progress_rv)
         val adapter = ProgressAdapter(this, trainings)
         rv.adapter = adapter
 
-        rv.layoutManager = LinearLayoutManager(view.context)
 
+        loadData {
+            loadingStub.isVisible = it
+            rv.layoutManager = LinearLayoutManager(view.context)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -60,22 +71,31 @@ class Progress : Fragment(), ProgressAdapter.Listener {
     private fun generateTrainingList(count: Int, trainings: MutableList<Training> ) {
         for(j in 0..count)
         {
-            trainings.add(Training("Тренировка $j", j * 1.2, j*500))
+            trainings.add(Training(j, j * 1.2, j*500))
         }
     }
 
     private fun startTrainingList(trainings: MutableList<Training>) : Int {
-        for(j in 0..5)
+        for(j in 0..7)
         {
-            trainings.add(Training("Тренировка $j", j * 1.2, j*500))
+            trainings.add(Training(j, j * 1.2, j*500))
         }
         return 5
+    }
+
+    private fun loadData(callback: (Boolean) -> Unit) {
+        thread {
+            Thread.sleep(1000)
+            handler.post {
+                callback.invoke(false)
+            }
+        }
     }
 
     override fun onClick(tr: Training) {
         activity?.supportFragmentManager?.let {
             val transaction = it.beginTransaction()
-            transaction.replace(R.id.frame_layout, DetailedProgress())
+            transaction.replace(R.id.frame_layout, createDetailedProgress(tr.num))
             transaction.commit()
         }
     }

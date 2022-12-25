@@ -27,7 +27,7 @@ class ProgressAdapter(val listener: Listener, private val trainings: List<Traini
         private val tv3: TextView = itemView.findViewById(R.id.view_trainings_t3)
 
         fun bind(training: Training, listener: Listener) {
-            tv1.text = training.name
+            tv1.text = "Тренировка ${training.num.toString()}"
             tv2.text = "Пройдена дистанция: ${training.dist.toString()}"
             tv3.text = "Потрачено каллорий: ${training.cal.toString()}"
             itemView.setOnClickListener {
